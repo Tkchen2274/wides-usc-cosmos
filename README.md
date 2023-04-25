@@ -1,0 +1,2 @@
+# wides-usc-cosmos
+COSMOS

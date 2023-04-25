@@ -1,2 +1,2 @@
 # wides-usc-cosmos
-COSMOS
+COSMOS test-bed

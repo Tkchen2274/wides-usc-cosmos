@@ -1,0 +1,1250 @@
+\documentclass{article}
+
+% ----------------- Math ---------------------
+\usepackage{amsmath,amssymb}    % align-equations function
+\usepackage{bm}
+% ============================================
+
+
+% --------------- Figures --------------------
+\usepackage{float}
+\usepackage{graphicx}   % for "\includegraphics"
+\usepackage{subcaption}
+% ===========================================
+
+
+% ----------------- Format ------------------
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{indentfirst}
+\usepackage{setspace}   % double space
+\usepackage{enumitem}   % for parameter definition
+    % Usage: 
+        %\begin{description}[font=\sffamily, leftmargin=2cm, style=nextline]
+        %    \item[Variable]
+        %        Description..
+        %\end{description}
+% ===========================================
+
+
+
+% ----------- New Command -------------------
+% Create a itemize list, with a customized distance. Used within itemize structure.Cannot delete the dot. 
+\newcommand\dataitem[1]{%
+  \item\relax\makebox[5cm][l]{\makebox[0cm][l]{{#1}}}\ignorespaces
+}
+% Usage: \dataitem {Title} Content
+    % Usage: 
+        %\begin{itemize}
+        %    \dataitem {Title} Content
+        %\end{itemize}
+% ===========================================
+
+
+% ----------------- Color -------------------
+% Hyperlink color
+\usepackage{hyperref} 
+    \hypersetup{   
+        colorlinks=true,
+        urlcolor=blue,
+        linkcolor=black,
+        citecolor=black,
+        % Hyperlink reference: 
+        % https://www.overleaf.com/learn/latex/Hyperlinks#Styles_and_colours
+    }
+    
+% Text color
+\usepackage[dvipsnames]{xcolor}
+% ===========================================
+
+
+% ------------ Page Margin ------------------
+\usepackage{geometry}
+\geometry{letterpaper,left=1in,right=1in,top=1in,bottom=1in, headheight=0.4in,footskip=0.5in}
+% ===========================================
+
+
+% --------------- Code ----------------------
+\usepackage{minted}
+\DeclareUnicodeCharacter{223C}{$\sim$}
+% ===========================================
+
+
+
+% ------------------ Table ------------------
+% \begin{tabular}{|c|c|c|c|}
+%     \hline
+%     \textbf{Title 1} & \textbf{Title 1} & \textbf{Title 1} & \textbf{Title 1}\\
+%     \hline\hline
+%     value 1 & value 2 & value 3 & value 4 \\
+%     \hline
+%     value 5 & value 6 & value 7 & value 8 \\ [1ex]
+%     \hline
+% \end{tabular}
+% ===========================================
+
+
+% ------------------ Figure -----------------
+% \begin{figure}[ht]
+%     \centering
+%     %\hspace{7mm}
+%     \includegraphics[width=1\columnwidth]{filename.jpg}
+%     \caption{figure's caption}
+%     \vspace*{0mm}
+%     \label{fig: figure's label}
+% \end{figure}
+% ==========================================
+
+
+
+% ==========================================================================
+% ==========================================================================
+\title{COSMOS Operation Instruction}
+\author{Yuning Zhang}
+\date{January 2022}
+\doublespacing
+
+\begin{document}
+\maketitle
+
+\href{https://wiki.cosmos-lab.org/cPanel/controlPanel/start}{Reservation for sb1 (COSMOS)} and use the \href{https://docs.google.com/spreadsheets/d/1xPYrlGE3fdgp6nT6kSQy_u71vQ1-qCfW/edit?usp=sharing&ouid=105630052024591065957&rtpof=true&sd=true}{Time Zone Sheet} to reserve the correct slots.  
+
+Reservation website login info: wides2021, Wides2021Brian
+
+\tableofcontents
+
+\section{Introducion}
+    COSMOS: \underline{C}loud-Enhanced \underline{O}pen \underline{S}oftware Defined \underline{Mo}bile Wireless Testbed for City-\underline{S}cale Deployment. It's awarded by NSF under the Platforms for Advanced Wireless Research (PAWR) program. \href{http://www.winlab.rutgers.edu/projects/cosmos/Index.html}{Click}. 
+    
+    All information presented as a slide 
+
+
+\section{Useful Links}
+    \begin{itemize}
+        \item \href{https://www.engineering.columbia.edu/news/cosmos-fcc-innovation-zone}{\textbf{Intro}: COSMOS Testbed Selected as One of Nation’s First FCC Innovation Zones}
+        
+        \item \href{https://futurenetworks.ieee.org/images/files/pdf/2021-03-26_IEEE_FNI_INGR_Testbed_WG_-_COSMOS.pdf}{\textbf{Slide}: IEEE FNI Testbed WG Meeting}. 
+        
+        \item \href{https://www.advancedwireless.org/wp-content/uploads/2018/05/COSMOS-Overview-2018.pdf}{\textbf{Slide}: COSMOS	Project	Overview}
+        
+        \item \href{https://www.researchgate.net/publication/339227709_Challenge_COSMOS_A_City-Scale_Programmable_Testbed_for_Experimentation_with_Advanced_Wireless}{\textbf{Paper}: Challenge: COSMOS: A City-Scale Programmable Testbed for Experimentation with Advanced Wireless}
+        
+        \item \href{https://dl.acm.org/doi/10.1145/3477086.3480834}{\textbf{Paper}: Programmable and Open-Access Millimeter-Wave Radios in the PAWR COSMOS Testbed}
+        
+        \item \href{https://www.youtube.com/watch?v=-tmH6C33Cl0&ab_channel=COSMOS}{\textbf{Video}: COSMOS Demonstrates New Open-Source, Open-Access mmWave Beam Tracking Testbed}
+        
+        \item \href{https://github.com/nyu-wireless/mmwsdr}{\textbf{Code}: GitHub source}
+        
+        \item \href{https://wiki.cosmos-lab.org/wiki/Tutorials/Wireless/mmwaveSB1}{mmwaveSB1}
+        
+        \item \href{https://wiki.cosmos-lab.org/wiki/WikiStart#COSMOSTestbedOverview}{COSMOS Wiki}
+    \end{itemize}
+
+
+\section{SSH Configuration}
+    Download PuTTY and Pageant from the PuTTY website, and configure them as below:
+    
+    \begin{center}
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Host Name/IP Address} &  console.sb1.cosmos-lab.org \\
+            \hline
+            \textbf{Type} &  SSH \\
+            \hline
+            \textbf{Private Key} &  SB1 Private Key.ppk \\
+            \hline
+            \textbf{Login Name} &  wides2021 \\
+            \hline
+            \textbf{PW} &  WIDES2021SB1 \\ [1ex]
+            \hline
+        \end{tabular}
+    \end{center}
+    
+    Then here are some optional configuration with the terminal:
+    
+    \begin{center}
+        \begin{tabular}{|c|c|}
+            \hline
+            \textbf{Enable X11 forwarding} &  Check \\
+            \hline
+            \textbf{X display location} &  localhost:0 \\
+            \hline
+            \textbf{Cursor Appearance} &  Block \\
+            \hline
+            \textbf{Font} &  Consolas, 18-point \\
+            \hline
+            \textbf{Font Quality} &  Default \\
+            \hline
+            \textbf{Windows Size} &  150 columns, 200 rows \\
+            \hline
+            \textbf{Lines of scroll-back} &  2000 \\ [1ex]
+            \hline
+        \end{tabular}
+    \end{center}
+
+
+
+
+\section{Testbed Topology}
+    The topology of the sandbox 1 (\href{https://wiki.cosmos-lab.org/wiki/Architecture/Domains/cosmos_sb1}{COSMOS Testbed 1}) contains multiple sections: Rooftop Interdigital Edgelink, Main Rooftop SDR Deployment, Benchtop mmWave SDR Setup, Core Servers and Networking, and Benchtop Interdigital 5G NR Performance System. The only section that we (WiDeS) are interested in is the Benchtop mmWave SDR Setup, as the \href{https://drive.google.com/file/d/1JYIPm89wtZSJL_tOgenqYn6T9bT1dQ3F/view?usp=sharing}{Figure} \ref{fig: Benchtop Topology} shows. 
+    
+    \begin{figure}[ht]
+        \centering
+        %\hspace{7mm}
+        \includegraphics[width=1\columnwidth]{Screenshots/Benchtop Topology.jpg}
+        \caption{Benchtop Topology}
+        \vspace*{0mm}
+        \label{fig: Benchtop Topology}
+    \end{figure}
+    
+    The nodes have particular names that can be recognized by the server, here is the table of the nodes from the benchtop section and some other accessory nodes (servers and such). The SDR name usually will followed by ``.sb1.cosmos-lab.org'', but can be omitted with the bash commands. 
+
+    Check the equipment lists by using the command below to see if all hardware you need is listed:
+    \begin{minted}{bash}
+        yourusename@console:~$ omf stat -t system:topo:allres
+    \end{minted}
+    
+
+    \textbf{Sandbox 1 resources}
+    \begin{center}
+        \begin{tabular}{||c c c||} 
+            \hline
+            \textbf{Node Name} & \textbf{SDR Name(.sb1)} & Frequency \\ [0.5ex] 
+            \hline\hline
+            Hand-held USRP-E312 & mob1-1 (10.37.10.1) & NaN \\ 
+            \hline
+            small Intel NUC \& B205-mini & mob2-1 (10.37.11.1) & NaN \\ 
+            \hline
+            big Intel NUC \& B210 & mob3-1 (10.37.12.1) & NaN \\ 
+            \hline
+            EdgeLink Device 1 & rfdev1-in1 (10.37.4.1) & 60GHz PtP Link \\
+            \hline
+            EdgeLink Device 2 & rfdev1-in2 (10.37.4.2) & 60GHz PtP Link \\
+            \hline
+            5G NR BS & rfdev2-in1 (10.37.5.1) & 28GHz \\
+            \hline
+            5G NR UE & rfdev2-in2 (10.37.5.2) & 28GHz \\
+            \hline
+            60GHz RF Front-end: Silver array (left, SN0240) & rfdev3-in1 & 60GHz \\
+            \hline
+            60GHz RF Front-end: Silver array (right, SN0243) & rfdev3-in2 & 60GHz \\
+            \hline
+            28GHz RF Front-end: IBM PAAM (left) & rfdev4-in1 & 28GHz \\
+            \hline
+            28GHz RF Front-end: IBM PAAM (right) & rfdev4-in2 & 28GHz \\
+            \hline
+            28GHz RF Front-end: Interdigital MHU (left) & rfdev5-in1 & 28GHz \\
+            \hline
+            28GHz RF Front-end: Interdigital MHU (right) & rfdev5-in2 & 28GHz \\
+            \hline
+            USRP-N310 + SDR Baseband Peripheral (left) & sdr1-in1 (10.37.6.1) & 28GHz \\
+            \hline
+            USRP-N310 + SDR Baseband Peripheral (right) & sdr1-in2 (10.37.6.2) & 28GHz \\
+            \hline
+            \textcolor{red}{Not show} & sdr1-in3 & NaN \\
+            \hline
+            USRP-N310 in medium node & sdr1-md1 (10.37.3.1) & NaN \\
+            \hline
+            USRP-N310 (sector 1) in large node & sdr1-s1-lg1 (10.37.2.1) & NaN \\
+            \hline
+            Xilinx RFSoC (left) & sdr2-in1 (10.37.6.3) & NaN \\
+            \hline
+            Xilinx RFSoC (right) & sdr2-in2 (10.37.6.4) & NaN \\
+            \hline
+            USRP-2974 in medium node & sdr2-md1 (10.37.3.2) & NaN \\
+            \hline
+            USRP-2974 (sector 1) in large node & sdr2-s1-lg1 (10.37.2.2) & NaN \\
+            \hline
+            \textcolor{red}{Not show} & sdr3-in1 & NaN \\
+            \hline
+            USRP-X310 (left) & sdr4-in1 (10.38.14.1) & NaN \\ 
+            \hline
+            USRP-X310 (right) & sdr4-in2 (10.38.14.2) & NaN \\ 
+            \hline
+            RF Switch (left) & rfsw1-in1 & sdr2 \& sdr 4 \\
+            \hline
+            RF Switch (right) & rfsw1-in2 & sdr2 \& sdr 4 \\
+            \hline
+            Sub-Servers:1-2 (mmWave) & srv1-in1/2 (10.37.1.3/4) & N/A \\
+            \hline
+            Sub-Servers:3 (mobile) & srv1-in3 (10.37.1.5) & N/A \\
+            \hline
+            Core-Servers:1-2 & srv1/2-lg1 (10.37.1.1/2) & N/A \\ [1ex] 
+            \hline
+        \end{tabular}
+    \end{center}
+    
+    \newpage
+    \textbf{Sandbox 2 resources}
+    \begin{center}
+        \begin{tabular}{||c c c||} 
+            \hline
+            \textbf{Node Name} & \textbf{SDR Name(.sb2)} & Frequency\\ [0.5ex] 
+            \hline\hline
+            Xilinx RFSoC (left) & rfdev1-in1 (10.116.4.1) & NaN \\
+            \hline
+            Xilinx RFSoC (right) & rfdev1-in2 (10.116.4.2) & NaN \\
+            \hline
+            28GHz RF Front-end: IBM PAAM (left) & rfdev2-in1 (10.116.5.1) & 28GHz \\
+            \hline
+            28GHz RF Front-end: IBM PAAM (right) & rfdev2-in2 (10.116.5.2) & 28GHz \\
+            \hline
+            \textcolor{red}{FD?} & rfdev3-in1 & not listed \\
+            \hline
+            \textcolor{red}{FD?} & rfdev3-in2 & not listed \\
+            \hline
+            USRP-N310 in medium node & sdr1-md1 (10.116.3.1) & NaN \\
+            \hline
+            USRP-2974 (Krypton) in medium node & sdr2-md1 (10.116.3.2) & NaN \\
+            \hline
+            USRP-N310 in large node & sdr1-s1-lg1 (10.116.2.1) & NaN \\
+            \hline
+            USRP-2974 (Krypton) in large node & sdr2-s1-lg1 (10.116.2.2) & NaN \\
+            \hline
+            RF Switch (large node) & rfsw-s1-lg1 & \href{https://wiki.cosmos-lab.org/attachment/wiki/Architecture/Domains/cosmos_sb2/SB2-BD.png}{figure} \\
+            \hline
+            RF Switch (medium node) & rfsw-md1 & \href{https://wiki.cosmos-lab.org/attachment/wiki/Architecture/Domains/cosmos_sb2/SB2-BD.png}{figure} \\
+            \hline
+            Core-Servers:1-2 & srv1/2-lg1 (10.116.1.1/2) & N/A \\ [1ex] 
+            \hline
+        \end{tabular}
+    \end{center}
+    
+    
+    \textbf{Bed resources}
+    \begin{center}
+        \begin{tabular}{||c c c||} 
+            \hline
+            \textbf{Node Name} & \textbf{SDR Name(.bed)} & Frequency\\ [0.5ex] 
+            \hline\hline
+            Medium Note at 1st floor & sdr2-md1 & \href{https://wiki.cosmos-lab.org/wiki/Architecture/Naming}{120th street} \\
+            \hline
+            Medium Note at 2nd floor & sdr1-md2 & \href{https://wiki.cosmos-lab.org/wiki/Architecture/Naming}{Amsterdam Ave} \\
+            \hline
+            Medium Note at 2nd floor & sdr2-md2 & \href{https://wiki.cosmos-lab.org/wiki/Architecture/Naming}{Amsterdam Ave} \\
+            \hline
+            Big Node 1, sector 2, sdr1, at 18th floor & sdr1-s2-lg1 & NaN \\
+            \hline
+            Big Node 1, sector 3, sdr1, at 18th floor & sdr1-s3-lg1 & NaN \\
+            \hline
+            Big Node 1, sector 1, sdr2, at 18th floor & sdr2-s1-lg1 & NaN \\
+            \hline
+            Big Node 1, sector 2, sdr2, at 18th floor & sdr2-s2-lg1 & NaN \\
+            \hline
+            Big Node 1, sector 3, sdr2, at 18th floor & sdr2-s3-lg1 & NaN \\
+            \hline
+            Core-server by all & srv1-co1 & N/A \\ 
+            \hline
+            Core-server by all & srv2-co1 & N/A \\ 
+            \hline
+            Server for 3 Big Nodes (18th floor) & srv1-lg1 & N/A \\ 
+            \hline
+            Server for 3 Big Nodes (18th floor) & srv2-lg1 & N/A \\ 
+            \hline
+            Server for 3 Big Nodes (18th floor) & srv3-lg1 & N/A \\ 
+            \hline
+            Server for 3 Big Nodes (18th floor) & srv4-lg1 & N/A \\ [1ex]
+            \hline
+        \end{tabular}
+    \end{center}
+
+    The switches and the X-Y table will not show up in the "omf stat" check list because they are not considered as "nodes". According to Jakub Kolodziejski, ``\emph{Nodes are devices that the user can control the power state of and interact with \textbf{directly} (e.g. SSH, serial-over-USB, etc). The RF switches and X-Y tables are not directly accessible by the user and are instead meant to be interacted with indirectly via out backend service APIs}''. That's why you don't see the switches and the X-Y table in Figure \ref{fig: SB1 Nodes Turned Off}.
+
+
+    
+
+    
+    
+    
+    
+\section{X-Y Table}
+    \subsection{Information}
+        The \href{https://wiki.cosmos-lab.org/wiki/Resources/Services/XYTable}{X-Y table setup} contains 2 tables, and each of them has 2 sliding tracks so that the arrays mounted on the tracks can be controlled to move to a particular position. The X-Y table cannot be accessed directly by the SSH command, instead, it requires the HTTP API to indirectly control, which locates at ``\emph{am1.cosmos-lab.org:5054/xy\_table}'' You can access it within the console. The specific access will be discussed later.  
+        
+        The dimension of the X-Y tables are 1.3m x 1.3m, so the movement is limited within a 1.3m x 1.3m area. The antenna arrays may be rotated $\pm45^\circ$. The centers of the tables are approximately 20m apart. The coordinate systems (including the origin point) has been flipped $180^\circ$ between the two tables as shown by \href{https://drive.google.com/file/d/1oGhTNy8XgbAVgezPOK04fDG4RUXeQpJS/view?usp=sharing}{Figure} \ref{fig: X-Y Table}. 
+        \begin{figure}[ht]
+            \centering
+            %\hspace{7mm}
+            \includegraphics[width=1\columnwidth]{Screenshots/XYtable.png}
+            \caption{X-Y Table positions}
+            \vspace*{0mm}
+            \label{fig: X-Y Table}
+        \end{figure}
+        
+        The small circle in each table represents the array, the $0^\circ$ direction is the array front side. So if you want to align two arrays without any rotation, the x-axis of one array and the x-axis of the other should be summed at 1300 (mm). The rotation positive direction is always defined as clockwise. They (COSMOS) can ensure\cite{XYTable} (they may update the Wiki) that the arrays are facing each other if the antennas are aligned on the x-axis and no rotation being involved. 
+        
+    \subsection{Usage}
+        All the available methods are accessible from the testbed console via an HTTP API. It can be interacted with via a command line tool such as "curl" or any script using a "REST client" library. According to Jakub Kolodziejski, ``\emph{Since they are HTTP REST-like, you must use something like "curl" from the command line or if you have a script, then use the HTTP request library of your choice}''. 
+        
+        The particular way to use the ``curl'' command is: 
+        \begin{minted}{bash}
+curl "am1.cosmos-lab.org:5054/xy_table/<command>?<parameter1>=value&<parameter2>=value..."
+        \end{minted}
+        
+        Here are some of the APIs:
+        \begin{itemize}
+            \item \textbf{Status \& Positions Check: status}
+            
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Parameter Name} & \textbf{Description} & \textbf{Required?} & \textbf{Valid Inputs}\\
+                    \hline\hline
+                    name & Comma between XY table FQDNs & Y & XY table FQDN list \\ [1ex]
+                    \hline
+                \end{tabular}
+            
+            Example for one valid input: ``xytable1.sb1.cosmos-lab.org''. FQDN: Fully Qualified Domain Name. 
+            
+            \vspace{1em}
+            \item \textbf{Movement: move\_to}
+                
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Parameter Name} & \textbf{Description} & \textbf{Required?} & \textbf{Valid Inputs}\\
+                    \hline\hline
+                    name & Comma between XY table FQDNs & Y & XY table FQDN list \\
+                    \hline
+                    x & X-axis coordinate (mm) & Y & 0 to 1300 \\
+                    \hline
+                    y & X-axis coordinate (mm) & Y & 0 to 1300 \\
+                    \hline
+                    angle & Targeted angle (deg) & Y & -45 to 45 \\ [1ex]
+                    \hline
+                \end{tabular}
+            
+            \vspace{1em}
+            \item \textbf{Stop Movement: stop}
+            
+                \begin{tabular}{|c|c|c|c|}
+                    \hline
+                    \textbf{Parameter Name} & \textbf{Description} & \textbf{Required?} & \textbf{Valid Inputs}\\
+                    \hline\hline
+                    name & Comma between XY table FQDNs & Y & XY FQDN list \\ [1ex]
+                    \hline
+                \end{tabular}
+        \end{itemize}
+            
+            
+            
+    \subsection{Examples}
+        \begin{itemize}
+            \item \textbf{Check X-Y Table 1 Status} 
+                \begin{minted}{bash}
+    curl "am1.cosmos-lab.org:5054/xy_table/status?name=xytable1.sb1.cosmos-lab.org"
+                \end{minted}
+                    
+                If you want to check the status of both X-Y tables, just add a comma after the -lab.org (without space bar), and then add the name of the X-Y table 2. 
+            
+            \item \textbf{Move X-Y Table} 
+            \begin{minted}{bash}
+            curl "am1.cosmos-lab.org:5054/xy_table/move_to?name=
+                xytable1.sb1.cosmos-lab.org&x=500&y=30&angle=15"
+            \end{minted}   
+        \end{itemize}
+        
+        From the observation, you may notice that there might be a constant shift between the current position/coordinate and the target position/coordinate. For example, Figure \ref{fig: X-Y Table Position Error} shows the error of the XY table 1 between the current position and the target position. And the error might be changing from time to time. 
+        \begin{figure}[ht]
+            \centering
+            %\hspace{7mm}
+            \includegraphics[width=1\columnwidth]{Screenshots/XY Table position error.jpg}
+            \caption{X-Y Table Position Error}
+            \vspace*{0mm}
+            \label{fig: X-Y Table Position Error}
+        \end{figure}
+        
+        \textbf{Note down both coordinates and their difference at every measurement, and try no to do measurement at both ends (0 or 1300)}. If the coordinate shift is not constant, then you can always re-compensate or re-adjust the target position to get the same \textcolor{red}{current position}, or same what? \textbf{\textcolor{red}{Double check with COSMOS, which parameter should be used to achieve a repeatable measurement. }}
+            
+    \subsection{Video Monitoring}
+    Use the command below to access the sub-server for a better video streaming:
+    
+    \colorbox{black}{\textcolor{magenta}{\textbf{yourusername@console:$\sim$\$ }}  \textcolor{white}{\large ssh -Y -c aes128\-ctr root@srv1-in1}}
+
+    \begin{minted}{bash}
+        yourusername@console:∼$ ssh -Y -c aes128-ctr root@srv1-in1
+    \end{minted}
+    
+    Access it by (My own customized image):
+
+        \colorbox{black}{\textcolor{magenta}{\textbf{root@srv1-in1:$\sim$\$ }}  \textcolor{white}{\large cd mmwsdr/host/demos/basic/}}
+        
+        \colorbox{black}{\textcolor{magenta}{\textbf{root@srv1-in1:$\sim$/mmwsdr/host/demos/basic/\# }}  \textcolor{white}{\large python video.py} \textcolor{cyan}{--node} \textcolor{white}{srv1-in1}  \textcolor{cyan}{--time} \textcolor{white}{10}}
+        
+        \begin{minted}{bash}
+            root@srv1-in1:∼$ cd mmwsdr/host/demos/basic/
+            root@srv1-in1:∼/mmwsdr/host/demos/basic/# python video.py --node srv1-in1 --time 10
+        \end{minted}
+        
+        For COSMOS default image, use:
+        
+        \colorbox{black}{\textcolor{magenta}{\textbf{root@srv1-in1:$\sim$\$ }}  \textcolor{white}{\large cd mmwsdr/host/demos/basic/}}
+        
+        \colorbox{black}{\textcolor{magenta}{\textbf{root@srv1-in1:$\sim$/mmwsdr/host/demos/basic/\# }}  \textcolor{white}{\large python video.py} \textcolor{cyan}{--node} \textcolor{white}{srv1-in1}}
+        
+        \begin{minted}{bash}
+            root@srv1-in1:∼$ cd mmwsdr/host/demos/basic/
+            root@srv1-in1:∼/mmwsdr/host/demos/basic/# python video.py --node srv1-in1
+            
+            root@srv1-in1:∼/mmwsdr/host/demos/basic/# python3 video.py --node srv1-in1
+        \end{minted}
+            
+            
+\section{Switch}
+    \href{https://wiki.cosmos-lab.org/wiki/Architecture/Domains/cosmos_sb1#RFPathConfigurationsformmWaveDevelopmentPlatforms}{Switch} is another kind of node that will not be listed by the ``omf'' command. 
+    
+    \subsection{Usage}
+    \begin{itemize}
+        \item \textbf{Setup: set}
+        
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Parameter Name} & \textbf{Description} & \textbf{Required?} & \textbf{Valid Inputs}\\
+                \hline\hline
+                name & best not to put multiple switches & Y & switch FQDN list \\
+                \hline
+                switch & comma between sub-switch & Y & 1 to 4 \\
+                \hline
+                port & port on sub-switch & Y & 1 or 2 \\ [1ex]
+                \hline
+            \end{tabular}
+
+            \textbf{Copy the command one line at a time, no space bar, and press enter after you paste all rows}. 
+            \begin{minted}{bash}
+        curl "am1.cosmos-lab.org:5054/rf_switch/set?name=rfsw1.sb1.cosmos-lab.org,
+            rfsw2.sb1.cosmos-lab.org&switch=1,2,3,4&port=2"
+            \end{minted}
+            
+            
+        \item \textbf{Check status: status}
+            
+            \begin{tabular}{|c|c|c|c|}
+                \hline
+                \textbf{Parameter Name} & \textbf{Description} & \textbf{Required?} & \textbf{Valid Inputs}\\
+                \hline\hline
+                name & Comma between RF Switch FQDNs & Y & RF Switch FQDN list \\ [1ex]
+                \hline
+            \end{tabular}
+            
+            The usage is the same as the X-Y table status check. 
+            \begin{minted}{bash}
+    curl "am1.cosmos-lab.org:5054/rf_switch/status?name=rfsw1.sb1.cosmos-lab.org"
+            \end{minted}
+    \end{itemize}
+
+        
+    \subsection{Connection} \label{sec: switch connection}
+        The switch 1 and 2 are connected between the 60GHz Sivers Array and either the Xilinx RFSoC or the USRP X310. Port 1 for all 4 sub-switches in both RF switches represent the USRP-X310, and port 2 for all 4 sub-switches in both RF switches connect to the RFSoC. For the RFSoC connection, the specific port connection is shown as Figure \ref{fig: RF Switch Connection}. 
+        \begin{figure}[ht]
+            \centering
+            %\hspace{7mm}
+            \includegraphics[width=.8\columnwidth]{Screenshots/RF Switch Connection.jpg}
+            \caption{RF Switch Connection}
+            \vspace*{0mm}
+            \label{fig: RF Switch Connection}
+        \end{figure}
+    
+    And the connection is:
+    
+    \begin{center}
+    \begin{tabular}{|c|c|}
+        \hline
+        \textbf{Xilinx RFSoC} & \textbf{Sivers Array}  \\
+        \hline\hline
+        DAC229\_T1\_CH2 & TX-I \\
+        \hline
+        DAC229\_T1\_CH3 & TX-Q \\
+        \hline
+        DAC229\_T0\_CH0 & RX-I \\
+        \hline
+        DAC229\_T0\_CH1 & RX-Q \\ [1ex]
+        \hline
+    \end{tabular}
+    \end{center}
+        
+    
+\section{Hardware}
+    \subsection{Siver's 60GHz array}
+    The link of this product is \href{https://www.sivers-semiconductors.com/evaluation-kits__trashed/evaluation-kit-evk06002/}{here}. It is a 16*4*2 array.
+    
+    
+    
+    
+\section{Tutorial: 60GHz RFSoC}
+    Follow the \href{https://wiki.cosmos-lab.org/wiki/Tutorials/Wireless/mmwaveRFSoC}{tutorial} of the wiki. 
+    \subsection{Preparation}
+        \subsubsection{System Check and Reset}
+            When you access the server by SSH, you will have such an interface (example with SB1) as shown by Figure \ref{fig: SB1 Lobby}. 
+            \begin{figure}[ht]
+                \centering
+                %\hspace{7mm}
+                \includegraphics[width=0.6\columnwidth]{Screenshots/SB1.jpg}
+                \caption{Resource being successfully reserved}
+                \vspace*{0mm}
+                \label{fig: SB1 Lobby}
+            \end{figure}
+            
+            First, you need to make sure all the nodes and devices of this reservation are turned off by the command:
+            \begin{minted}{bash}
+                yourusername@console:~$ omf tell -a offh -t system:topo:allres
+                yourusername@console:~$ omf stat -t system:topo:allres
+            \end{minted}
+            
+            And what you should have is the Figure \ref{fig: SB1 Nodes Turned Off}. You may also double check if the power off operation is done correctly just by going to the \href{https://wiki.cosmos-lab.org/tractab/Status}{status} page, and check the node status as the Figure \ref{fig: SB1 Nodes Turned Off status} shows. 
+            
+            \begin{figure}[ht]
+            	\captionsetup[subfigure]{position=bottom}
+            	\centering
+            	
+                \subcaptionbox{Resource being successfully reserved \label{fig: SB1 Nodes Turned Off}} {\includegraphics[width=.45\linewidth]{Screenshots/SB1 Nodes Turn Off List.jpg}}
+                \hspace{.05\linewidth}
+                \subcaptionbox{Status when all nodes are powered off\label{fig: SB1 Nodes Turned Off status}} {\includegraphics[width=.45\linewidth]{Screenshots/SB1 Nodes Turn Off Status.jpg}}
+                
+                \caption{Powered Off All Nodes}    \label{fig: SB1 Nodes Turned Off Check}
+            \end{figure}
+
+    
+        \subsubsection{Load Image}
+            When the system is powered off, you can \textbf{load the system image into the needed servers} by using the command ``omf load'' (check your correct image from the root directory: ~/export/omf-images-5.4):
+            \begin{minted}{bash}
+                yourusername@console:~$ omf load -i wides2021_rfsoc.ndz -t srv1-in1,srv1-in2
+                "rfsoc_sivers_sb1.ndz"
+                yourusername@console:~$ omf stat -t system:topo:allres
+            \end{minted}
+            
+            % "yourusername-node-srv1-in2.sb1.cosmos-lab.org-2022-02-23-08-19-44.ndz"   % old image
+            
+            Sometimes there will be an error that described in Section \ref{sec: timeout error}, then just follow the corresponded solution. 
+            
+            Figure \ref{fig: Image Loaded} is the screenshot that indicates the image has been loaded successfully. 
+            
+            If everything is correct, then what you will see is a list of Figure \ref{fig: SB1 Nodes Turned Off}, just the ``Reply: OK'' part will be replaced by ``State: POWEROFF''. (Always remember such image-loading process must be done when all the nodes (or at least the servers) are powered off). 
+            \begin{figure}[ht]
+                \centering
+                %\hspace{7mm}
+                \includegraphics[width=0.6\columnwidth]{Screenshots/Image Loaded.jpg}
+                \caption{Image Loaded}
+                \vspace*{0mm}
+                \label{fig: Image Loaded}
+            \end{figure}
+            
+            After the image has been successfully loaded, you may power on all the required resources by:
+            \begin{minted}{bash}
+yourusername@console:~$ omf tell -a on -t srv1-in1,srv1-in2,rfdev3-in1,rfdev3-in2,sdr2-in1,sdr2-in2
+                yourusername@console:~$ omf stat -t system:topo:allres
+            \end{minted}
+            
+            Then Figure \ref{fig: Nodes On} will be what you can see in the terminal. 
+            \begin{figure}[ht]
+                \centering
+                %\hspace{7mm}
+                \includegraphics[width=0.6\columnwidth]{Screenshots/Nodes On.jpg}
+                \caption{Required Nodes Power On Successfully}
+                \vspace*{0mm}
+                \label{fig: Nodes On}
+            \end{figure}
+            
+            And you will expect only the nodes that you powered on display as ``POWERON'' in the status list. 
+        
+        
+    
+        \subsubsection{Connect the Switch} \label{sec: 60ghzTutorial - Connect Switch}
+            Since this tutorial is trying to use the RFSoC as the SDR, so we need to connect it to the RF front-end, which is the 60GHz Silvers array. According to Sec. \ref{sec: switch connection}, we use the following commands to connect the RFSoC with Sivers array (\textbf{Copy the command one line at a time, no space bar, and press enter after you paste all rows}):
+            \begin{minted}{bash}
+        curl "am1.cosmos-lab.org:5054/rf_switch/set?name=rfsw1.sb1.cosmos-lab.org,
+            rfsw2.sb1.cosmos-lab.org&switch=1,2,3,4&port=2"
+            \end{minted}
+        
+            You cannot check the switch status by using ``omf stat'' command. Instead, you should use the similar command with checking X-Y table status:
+            \begin{minted}{bash}
+            curl "am1.cosmos-lab.org:5054/rf_switch/status?name=
+                rfsw1.sb1.cosmos-lab.org,rfsw2.sb1.cosmos-lab.org"
+            \end{minted}        
+            
+            What you want to see is what Figure \ref{fig: RF Swtich Status} shows. 
+            \begin{figure}[ht]
+                \centering
+                %\hspace{7mm}
+                \includegraphics[width=1\columnwidth]{Screenshots/RF Swtich Status.png}
+                \caption{RF Switch Been Configured by connecting RFSoC and Silver array}
+                \vspace*{0mm}
+                \label{fig: RF Swtich Status}
+            \end{figure}
+            
+    \subsection{RFSoC Setup}
+        Every time the RFSoC is power cycled, you need to download the firmware/image from the server by using the Xilinx XSCT tool over JTAG. This process may take around 5 to 10 min. Remember, download one image at a time. When you access the root@ host, it will ask you if you want to proceed (fingerprint recognition). Just input ``yes'' and keep entering the rest of two row of commands. 
+        
+        \vspace{2em}
+        Download package (necessary after power cycle the SDR) and configure the network:
+        \begin{minted}{bash}
+        yourusername@console_1:∼$ ssh -Y root@srv1-in1
+        yourusername@console_2:∼$ ssh -Y root@srv1-in2
+                                cd mmwsdr ; git pull
+        root@srv1-in1:∼/mmwsdr# cd fpga/nonrt-ch1/jtag/sb1_sdr2_in1
+        root@srv1-in2:∼/mmwsdr# cd fpga/nonrt-ch1/jtag/sb1_sdr2_in2
+                                xsct download_firmware.tcl
+        root@srv1-in1:∼/mm..._in1# cd ../../../../host/scripts ; ./ipconfig_tx.sh
+        root@srv1-in2:∼/mm..._in2# cd ../../../../host/scripts ; ./ipconfig_rx.sh
+        \end{minted}
+        
+        
+        \textbf{Note}: If the ssh to root@node connection cannot be built, wait longer since the node might be still preparing for boot up. 
+        
+        \textbf{Note}: Use ``\textbf{exit}'' to disconnect from the sub-server. 
+        
+        \textbf{Note}: When there is an error during xsct downloading, try to power cycle the SDR node. 
+        
+        \textbf{Note}: Use ``ip addr show'' to double check if the network has been configured successfully (compared with the following commented values). 
+        % root@srv1-in1:∼$ ip link set enp1s0 mtu 9000 up
+        % root@srv1-in1:∼$ ip link set enp3s0 mtu 9000 up
+        % root@srv1-in1:∼$ ip addr add 10.38.1.3/16 dev enp1s0
+        % root@srv1-in1:∼$ ip addr add 10.39.1.3/16 dev enp3s0
+        % root@srv1-in1:∼$ source ~/mmwsdr/host/scripts/sivers_ftdi.sh
+        
+        % root@srv1-in2:∼$ ip link set enp1s0 mtu 9000 up
+        % root@srv1-in2:∼$ ip link set enp3s0 mtu 9000 up
+        % root@srv1-in2:∼$ ip addr add 10.38.1.4/16 dev enp1s0
+        % root@srv1-in2:∼$ ip addr add 10.39.1.4/16 dev enp3s0
+
+
+
+        
+    \subsection{Basic Demos}    
+        For the one-node measurement:
+        
+        \textbf{Run Xming server}. 
+    
+        \begin{minted}{bash}
+        root@srv1-in1:~# cd ../demos/basic
+        python onenode.py --f 60.48e9 -n srv1-in1 -m tx --min -450 --max 450
+        root@srv1-in2:~# cd ../demos/basic
+        python onenode.py -f 60.48e9 -n srv1-in2 -m rx -g 1 -d 1_3 -S y 
+        \end{minted}
+        
+        For the two-node measurement:
+        Put these command into srv1-in1 and srv1-in2 and run the twonode.py. The srv1-in1 will only communicate with the array, the actual commands will be sent from srv1-in2: 
+        
+        
+        \begin{minted}{bash}
+        root@srv1-in1:~# cd ../mmwsdr/array ; python ederarray.py -u SN0240
+        root@srv1-in2:~# cd ../demos/basic
+        root@srv1-in2:~/mmwsdr/host/demos/basic#
+        python twonode.py -n srv1-in2 -N 1024 -F 5 -T cosmos -I 3 -g 2 -d 6_1 -S y
+        --x1 0 --y1 0  --a1 0 --x2 1300 --y2 0 --a2 0
+        
+        python twonode.py -n srv1-in2 -N 1024 -F 5 -T cosmos -I 3 -g 2 -d 6_2 -S y
+        --x1 0 --y1 1300  --a1 0 --x2 1300 --y2 0 --a2 0
+        
+        python twonode.py -n srv1-in2 -N 1024 -F 5 -T cosmos -I 3 -g 2 -d 6_3 -S y
+        --x1 0 --y1 0  --a1 0 --x2 1300 --y2 1300 --a2 0
+        
+        python twonode.py -n srv1-in2 -N 1024 -F 5 -T cosmos -I 3 -g 2 -d 6_4 -S y
+        --x1 0 --y1 1300  --a1 0 --x2 1300 --y2 1300 --a2 0
+        \end{minted}
+        % python twonode.py -f 60.48e9 -n srv1-in2 --min -1 --max -1 -N 1024 -F 1 -g 1 -d 9 -S y
+        
+    \subsection{Upload Data}
+        After you run a measurement, you want to push the code to Github to update the data. First you use \textbf{ls} to check if the data is saved. Then use the following commands to update the Git. 
+    \subsection{Git}
+        \begin{minted}{bash}
+                root@srv1-in2:~/mmwsdr/host/demos/basic# cd ../../..
+                root@srv1-in2:~/mmwsdr# git add .
+                root@srv1-in2:~/mmwsdr# git commit -m <message>
+                root@srv1-in2:~/mmwsdr# git push srv1 main
+            \end{minted}
+            
+    \subsection{Save Images}
+            Go the server 1, use commands:
+            \begin{minted}{bash}
+                yourusername@console:~$ ssh root@srv1-in1
+                root@node:~# ./prepare.sh
+                root@node:~# exit
+                yourusername@console:~$ omf save -n srv1-in2.sb1.cosmos-lab.org
+            \end{minted}
+            
+            Then use WinSCP/command line to change the image name. The image is saved at: \textbf{/export/omf-images-5.4/}. 
+        
+        
+        
+\section{Tutorial: 60GHz USRP}        
+For reference, check the original  \href{https://wiki.cosmos-lab.org/wiki/Tutorials/Wireless/mmwaveSB1}{tutorial}. 
+    \subsection{Preparation}
+    Before everything, put 4 terminals at the \textbf{laptop screen} and the \textbf{main monitor} respectively as the layout of Fig. \ref{fig: ssh layout} shows:
+    \begin{figure}[ht]
+        \centering
+        %\hspace{7mm}
+        \includegraphics[width=.7\columnwidth]{Screenshots/ssh layout.png}
+        \caption{SSH terminals at laptop screen}
+        \vspace*{0mm}
+        \label{fig: ssh layout}
+    \end{figure}
+    
+    \vspace{2em}
+    For the laptop screen, 
+    \begin{description}[font=\sffamily, leftmargin=3cm, style=nextline]
+        \item[upper left]
+            srv1-in1 monitor
+        \item[upper right]
+            srv1-in2 monitor
+        \item[bottom left]
+            srv1-in1 GUI starter
+        \item[bottom right]
+            srv1-in2 GUI starter
+    \end{description}
+
+    \vspace{2em}
+    For the main monitor:
+    \begin{description}[font=\sffamily, leftmargin=3cm, style=nextline]
+        \item[upper left]
+            main controller
+        \item[upper right]
+            xytable movement controller
+        \item[bottom left]
+            srv1-in1 (Tx) controller
+        \item[bottom right]
+            srv1-in2 (Rx) controller
+    \end{description}
+    
+    
+        \subsubsection{System Check and Reset}
+        \textbf{\textcolor{red}{Big top left terminal}}
+        
+            Turn off all devices and check status:
+            \begin{minted}{bash}
+                yourusername@console:~$ omf stat -t srv1-in1,srv1-in2,srv1-lg1,
+                    srv2-lg1,sdr4-in1,sdr4-in2,rfdev3-in1,rfdev3-in2
+                
+                yourusername@console:~$ omf tell -a offh -t srv1-in1,srv1-in2,srv1-lg1,
+                    srv2-lg1,sdr4-in2,rfdev3-in1,rfdev3-in2
+            \end{minted}
+            
+            
+
+    
+        \subsubsection{Load Image and update Git}
+            When the system is powered off, you can \textbf{load the system image into the needed servers} by using the command ``omf load'' (check your correct image from the root directory: ~/export/omf-images-5.4):
+            
+            \textbf{\textcolor{red}{Big upper left terminal}}
+            
+            \begin{minted}{bash}
+            yourusername@console:~$ omf load -i wides2021_USRP_lg1.ndz -t srv1-in1,srv1-in2
+            \end{minted}
+            
+            \textbf{\textcolor{red}{Big bottom left terminal}}
+            
+            \begin{minted}{bash}
+            yourusername@console:~$ omf load -i wides2021_USRP_lg1.ndz -t srv1-lg1,srv2-lg1
+            \end{minted}
+            
+            % "wides2021_usrp.ndz"
+            % "rfsoc_sivers_sb1.ndz"
+            % "sivers_sb1_cosmos.ndz  (usrp)"
+            % "wides2021_usrp_NEW_2.ndz"
+            
+            % "wides2021-node-srv1-in2.sb1.cosmos-lab.org-2022-02-23-08-19-44.ndz"   % old image
+            
+            \href{https://github.com/BrianZ96/COSMOS_USRP}{Personal Git}.
+            \href{https://github.com/EttusResearch/uhd}{Ettus UHD Git}. 
+            
+            While the image is loading to the servers, update the Git from local to the remote by:
+            \begin{minted}{bash}
+                git status
+            \end{minted}
+            If the Git is not updated, commit the current change and update the Git to the remote. 
+            
+            \textbf{\textcolor{red}{If there is any change, commit and push them. }}
+            
+            \subsubsection{Turn on Nodes}
+            The 2 small servers should finish the image loading first, so after the image has been successfully loaded to srv1-in1 and srv1-in2, you may power on all the required resources by:
+            
+            \textbf{\textcolor{red}{Big upper left terminal}}
+            
+            \begin{minted}{bash}
+        yourusername@console:~$ omf tell -a on -t srv1-in1,srv1-in2,sdr4-in2,rfdev3-in1,rfdev3-in2
+            \end{minted}
+            
+            
+            \textbf{\textcolor{red}{Big bottom left terminal}}
+            
+            When the image is loaded to srv1-lg1 and srv2-lg1, it could take a while until them to be off. After check they are off, turn them on and check the status:
+            \begin{minted}{bash}
+            yourusername@console:~$ omf stat -t srv1-lg1,srv2-lg1
+        yourusername@console:~$ omf tell -a on -t srv1-lg1,srv2-lg1
+
+            yourusername@console:~$ omf stat -t srv1-in1,srv1-in2,srv1-lg1,
+                srv2-lg1,sdr4-in1,sdr4-in2,rfdev3-in1,rfdev3-in2
+            \end{minted}
+            
+            
+        
+        
+    
+        \subsubsection{Connect the Switch} \label{sec: 60ghzTutorial - Connect Switch}
+        \textbf{\textcolor{red}{Big upper left terminal}}
+        
+            Configure the switch to make sure the Sivers frontend is connected to the USRP by port 1:
+            \begin{minted}{bash}
+        curl "am1.cosmos-lab.org:5054/rf_switch/set?name=rfsw1.sb1.cosmos-lab.org,
+            rfsw2.sb1.cosmos-lab.org&switch=1,2,3,4&port=1"
+            \end{minted}
+        
+            You cannot check the switch status by using ``omf stat'' command. Instead, you should use the similar command with checking X-Y table status:
+            \begin{minted}{bash}
+            curl "am1.cosmos-lab.org:5054/rf_switch/status?name=
+                rfsw1.sb1.cosmos-lab.org,rfsw2.sb1.cosmos-lab.org"
+            \end{minted}        
+
+            
+    \subsection{USRP Setup}
+        SSH to the root servers for all terminals. 
+
+        \textbf{\textcolor{red}{All terminals except Big bottom terminals(lefts are srv1-in1, rights are srv1-in2)}}
+
+        \begin{minted}{bash}
+    yourusername@console_1:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv1-in1
+    yourusername@console_2:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv1-in2
+            image passwd:      WIDES2021SRV1
+        \end{minted}
+        
+        The small server should be turned on first, then:
+        
+        \textbf{\textcolor{red}{Big top 2 terminals}}
+
+        \begin{minted}{bash}
+root@srv1-in*:∼$ git pull; cd ~/uhd/host/build; make; sudo make install; sudo ldconfig
+        \end{minted}
+        % -c aes128-ctr 
+        
+        
+        \textbf{\textcolor{red}{Big bottom 2 terminals}}
+
+        \begin{minted}{bash}
+    yourusername@console_1:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv1-lg1
+    yourusername@console_2:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv2-lg1
+            image passwd:      WIDES2021SRV1
+root@srv*-lg1:∼$ git pull; cd ~/uhd/host/build; make; sudo make install; sudo ldconfig
+        \end{minted}
+        
+        
+        
+        
+
+        % \begin{minted}{bash}
+        % root@srv1-in*:∼$ git pull
+        % \end{minted}
+        
+        
+        % root@srv1-in2:∼# /usr/lib/uhd/examples/rx\_ascii\_art\_dft --args="addr=10.38.
+        % 14.2" --freq 100e6 --rate 10e6 --ref-lvl -40 --ant AB --subdev B:A
+        
+        
+        If there is no ``build'' folder, go with the \textbf{commented} codes:
+    % cd ~/uhd/host; mkdir build; cd build; cmake ../; make; sudo make install; sudo ldconfig
+
+        
+        
+        
+    
+        
+        \subsubsection{GUI and video preparation}
+        Once ready to run experiment, first you need to get the Sivers TRX-BF01 EVK GUI software ready. Access the GUI software.
+        
+        \textbf{\textcolor{red}{\textbf{Run Xming server}}}
+        
+        \textbf{\textcolor{red}{Small two bottom terminals}}
+        
+        \begin{minted}{bash}
+                    cd ~/ederenv; ./start_mb1.sh -gui SN0240
+                    
+                    cd ~/ederenv; ./start_mb1.sh -gui SN0243
+        \end{minted}
+        
+        
+        % Create 2 new terminals to the root servers. 
+        % SSH to the root servers.
+        % \begin{minted}{bash}
+        % yourusername@console_1:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv1-in1
+        % yourusername@console_2:∼$ ssh -Y -o "StrictHostKeyChecking no" root@srv1-in2
+        %     image passwd:      WIDES2021SRV1
+        % \end{minted}
+        
+        Within the 0240 GUI, choose the \textbf{Tx} tab, and then click \textbf{Enable Tx} and \textbf{LO Leackage Cal}.
+        Within the 0243 GUI, click \textbf{Enable Rx}. 
+        
+        While the Tx is calculating the LO leackage, control the XY table by the \textbf{\textcolor{red}{Small two upper terminals}}.
+        \begin{minted}{bash}
+                cd ~/table/host/demos/basic/; python video.py -n srv1-in1
+    
+                cd ~/table/host/demos/basic/; python video.py -n srv1-in2
+        \end{minted}
+        
+        
+        \subsubsection{Run Measurement}
+        At the \textbf{\textcolor{red}{Big two upper terminals}}, control the XY table positions. 
+        
+        \begin{minted}{bash}
+            cd ~/table/host/demos/basic/
+        \end{minted}
+        
+        Control codes:
+        \begin{minted}{bash}
+                    python move.py -g no -n srv1-in1 -c 1
+        
+                    python move.py -g no -n srv1-in2 -c 1
+            
+            or control from single node:
+                    python move.py -g yes -c 1
+        \end{minted}
+        
+        To check the XY tables positions and status, use:
+        \begin{minted}{bash}
+                    python pos.py
+        \end{minted}
+        
+        
+        \newpage
+        When the Tx LO leackage calcualtion is done, go the \textbf{\textcolor{red}{Big two bottom terminals}}
+        
+        ========================================================
+        
+        Now configure the network:
+        \begin{minted}{bash}
+        root@srv1-lg1:~# ~/uhd/host/examples/Brian/configuration_tx.sh
+        
+        root@srv2-lg1:~# ~/uhd/host/examples/Brian/configuration_rx.sh
+        
+        For single node:
+        ~/uhd/host/examples/Brian/configuration_txrx.sh
+        \end{minted}
+        
+        
+        At the \textbf{root@srv1-lg1}, 
+        % ~/uhd/host/build/examples/Brian_tx
+        \begin{minted}{bash}
+        cp  -v ~/uhd/host/examples/Brian/Signal/* ~/uhd/host/build/
+
+        
+        Default:
+        ~/uhd/host/build/examples/Brian_tx_2
+
+            
+        ~/uhd/host/build/examples/Brian_tx_2 --rate 200e6 --freq 100e6 --
+        signal cosmos_-100MHz_to_100MHz_SR_200MS --max-freq 100e6
+        
+        \end{minted}
+        % ~/uhd/host/build/examples/tx_waveforms --args="addr=10.38.14.1" --rate 20e6 --
+        % freq 100e6 --ampl 0.7 --gain 0 --ant AB --subdev A:AB --wave-type SINE --
+        % wave-freq 1e6 --ref external --pps external 
+        
+        % ~/uhd/host/build/examples/Brian_tx_2 --ampl 0.7 --ant AB --args="addr=10.38.14.1" --
+        % freq 80e6 --gain 0 --rate 20e6  -- ref external --subdev A:AB --wave-
+        % type SINE --wave-freq 1e6
+        
+        
+        
+        At the \textbf{root@srv2-lg1}, 
+        \begin{minted}{bash}
+        cp  -v ~/uhd/host/examples/Brian/Signal/* ~/uhd/host/examples/Brian/Results/
+        
+        cd ~/uhd/host/examples/Brian/Results; ~/uhd/host/build/examples/Brian_rx --
+        rate 200e6 --freq 100e6 --nsamps 10000 --file test_1_1
+        
+        cd ~/uhd/host/examples/Brian/Results; ~/uhd/host/build/examples/Brian_rx --
+        rate 200e6 --freq 100e6 --duration 10 --file test_1_1
+        \end{minted}
+        
+        
+        
+        For the \textbf{Brian\_txrx.cpp}, run the commands below at \textbf{root@srv1-lg1}:
+        \begin{minted}{bash}
+        cp  -v ~/uhd/host/examples/Brian/Signal/* ~/uhd/host/examples/Brian/Results/
+
+        cd ~/uhd/host/examples/Brian/Results; ~/uhd/host/build/examples/Brian_txrx --
+        rx-nsamps 10000 --rx-file-group 7 --rx-file-N 8 --rx-file-testid 1
+        \end{minted}
+        
+        % cd ~/uhd/host/examples/Brian/Results; ~/uhd/host/build/examples/Brian_rx --
+        % file test_2_0_noFtr.dat --rate 20e6 --freq 3.5e9
+        
+        ========================================================
+        
+        After the measurement, go to the GUI software and disable both Tx and Rx, then close the GUI softwares. If you need to save the image, follow the Sec. \ref{usrp section: save image}. And turn off all nodes:
+        \begin{minted}{bash}
+                exit
+                
+                yourusername@console:~$ omf tell -a offh -t srv1-in1,srv1-in2,srv1-lg1,
+                    srv2-lg1,sdr4-in2,rfdev3-in1,rfdev3-in2
+                     
+            \end{minted}
+        
+    \subsection{Attention}
+        
+        If need to update the FPGA image version:
+        \begin{minted}{bash}
+        /usr/local/lib/uhd/utils/uhd_images_downloader.py
+        
+        /usr/local/bin/uhd_image_loader --args="type=x300,addr=10.38.14.2"
+        \end{minted}
+        
+        Then power cycle the USRP after the update. 
+        
+        
+
+        
+        
+        
+        \subsubsection{USRP Identification}
+        Now use ``uhd\_find\_devices'' to find all available devices. 
+        \begin{figure}[ht]
+            \centering
+            %\hspace{7mm}
+            \includegraphics[width=.5\columnwidth]{Screenshots/uhd_find_devices.png}
+            \caption{UHD Find Devices}
+            \vspace*{0mm}
+            \label{fig: uhd find devices}
+        \end{figure}
+        
+        You can either use serial, addr, or name to identify the USRPs. 
+        
+        \subsubsection{Daughterboards}
+        There are 4 different antenna modes for Tx and Rx. 
+        \begin{itemize}
+            \item \textbf{Antenna Mode A:} real signal from antenna RX/Tx A
+            \item \textbf{Antenna Mode B:} real signal from antenna RX/Tx B
+            \item \textbf{Antenna Mode AB:} complex signal using both antennas (IQ)
+            \item \textbf{Antenna Mode BA:} complex signal using both antennas (QI)
+        \end{itemize}
+        
+        And the BW for the real-mode is 250 MHz, for complex-mode is 500MHz. For the measurement, the example gives the antenna mode as \textbf{AB}. 
+        
+        \subsubsection{Subdevice}
+        When specify a subdevice, the format is composed of
+        \begin{minted}{bash}
+            <motherboard slot name>:<daughterboard frontend name>
+        \end{minted}
+        Both the daughterboards have one frontend:0, and just choose what example gives: \textbf{A:AB} for Tx and \textbf{B:AB} for Rx. The ``AB'' here means the different daughterboards, not antenna mode. The topology map of the daughterboard is \href{https://kb.ettus.com/USRP_X_Series_Quick_Start_(Daughterboard_Installation)}{here}. To know the exact name of the USRP devices and the daughter boards, use the following command:
+        \begin{minted}{bash}
+            uhd_usrp_probe
+        \end{minted}
+        
+        
+
+        
+        \vspace{2em}
+        \newpage
+        
+        
+    \subsection{Upload Data}
+        After you run a measurement, you want to push the code to Github to update the data. First you use \textbf{ls} to check if the data is saved. Then use the following commands to update the Git. 
+    \subsection{Git}
+        \begin{minted}{bash}
+                root@srv1-in2:cd ~; git add .
+                root@srv1-in2: git commit ...
+                root@srv1-in2: git push
+            \end{minted}
+            
+    \subsection{Save Images}  \label{usrp section: save image}
+    \textbf{Make sure the GUI software are closed!!!}
+            Go the the server that you want to save the image, use commands:
+            \begin{minted}{bash}
+                yourusername@console:~$ ssh root@srv1-in*
+                root@node:~# ./prepare.sh
+                root@node:~# exit
+                yourusername@console:~$ omf save -n srv1-in2.sb1.cosmos-lab.org
+                yourusername@console:~$ cd /export/omf-images-5.4; ls
+                yourusername@console:/export/omf-images-5.4$ mv *** wides2021_usrp_newbuild.ndz
+            \end{minted}
+            
+            Then use WinSCP/command line to change the image name. The image is saved at: \textbf{/export/omf-images-5.4/}. 
+            
+            \begin{minted}{bash}
+                yourusername@console:~$ omf tell -a offh -t srv1-in1,srv1-in2,srv1-lg1,
+                    srv2-lg1,sdr4-in2,rfdev3-in1,rfdev3-in2
+            \end{minted}
+
+
+
+\section{Measurement Required Devices}
+    \subsection{XY table}
+    For XY table, right now the only available RF front-end is the Sivers 60GHz array. The SDRs are available with the RFSoC and X310 USRP. 
+
+    
+    
+    
+\newpage
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+\newpage
+.
+\newpage
+.
+\newpage
+
+\section{Error Records}
+\subsection{Timeout when loading the image to servers}  \label{sec: timeout error}
+    \subsubsection{Description}
+    When run the command below, you may encounter a time-out error by the Figure \ref{fig: time out error} shows. 
+    \begin{minted}{bash}
+        yourusername@console:~$ omf load -i rfsoc_sivers_sb1.ndz -t srv1-in1,srv1-in2
+    \end{minted}
+    
+    \begin{figure}
+    	\captionsetup[subfigure]{position=bottom}
+    	\centering
+    	
+        \subcaptionbox{Time Out Error 1 \label{fig: time out error 1}} {\includegraphics[width=1\linewidth]{Screenshots/TimeOutError1.png}}
+        \hspace{.1\linewidth}
+        \subcaptionbox{Time Our Error 2 \label{fig: time out error 2}} {\includegraphics[width=1\linewidth]{Screenshots/TimeOutError2.png}}
+        
+        \caption{Time Out Error}    \label{fig: time out error}
+    \end{figure}
+
+    \subsubsection{Solution}
+        There is no solution needed. The reason for this error is that the back-end services are restarting periodically. By Jakub  Kolodziejski from the Rutgers University, ``\emph{just try the command again in a few minutes and it should work}''. 
+        
+        However, it also might be an image-error. Try to contact COSMOS if this error lasts more than 2 days. 
+        
+\subsection{Node Not Available Error}
+    \textcolor{green}{Maintenance Issue. Check with COSMOS to fix}.
+    
+\subsection{``No route to host'' Error}
+    \textcolor{green}{Optical Switch Issue. Check with COSMOS to fix.}.  Or wait for the server to boot up completely. 
+
+
+        
+    
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+
+
+
+\end{document}

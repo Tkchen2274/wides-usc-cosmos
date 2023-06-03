@@ -1,0 +1,20 @@
+%This is a comment, only full line comments are available
+%Syntax är:
+%Gruppnamn\n 																							  
+%register name : [physical address, size, power-on/reset value] : Matrix of controls in register[[name of control, startBit (0, endBit]]\n
+%If a control only uses one bit, set both to that bit.
+%It is important that a register is declared on one line
+BB
+tx_bb_ctrl:           [0x0060, 1, 0x00]:  [["tx_bb_ctrl",0,8]]
+tx_bb_gain:           [0x0064, 1, 0x00]:  [["tx_bb_gain",0,8]]
+tx_bb_iq_gain:        [0x0065, 1, 0x00]:  [["tx_bb_iq_gain",0,8]]
+tx_bb_i_dco:          [0x0062, 1, 0x00]:  [["tx_bb_i_dco",0,7]]
+tx_bb_q_dco:          [0x0061, 1, 0x00]:  [["tx_bb_q_dco",0,7]]
+tx_bb_phase:          [0x0063, 1, 0x00]:  [["tx_bb_phase",0,8]]
+#
+RF
+bias_ctrl_tx:         [0x0029, 3, 0x00]:  [["bias_ctrl_tx",0,17]]
+tx_rf_gain:           [0x0066, 1, 0x00]:  [["tx_rf_gain",0,4]]
+#
+BF
+tx_bf_gain:           [0x0067, 1, 0x00]:  [["tx_bf_gain",0,4]]

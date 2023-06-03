@@ -1,0 +1,107 @@
+clc;clear;close all;
+
+fid1 = fopen('extn_clock_vfc_1.dat','r');
+fid2 = fopen('extn_clock_vfc_2.dat','r');
+vfc_1 = fread(fid1,'*double');
+vfc_2 = fread(fid2,'*double');
+fclose all;
+
+
+clear fid1  fid2  ans
+
+
+
+vfc_1 = reshape(vfc_1, 2, [])';
+vfc_1 = vfc_1(:,1) + vfc_1(:,2)*1i;
+
+vfc_2 = reshape(vfc_2, 2, [])';
+vfc_2 = vfc_2(:,1) + vfc_2(:,2)*1i;
+
+
+
+
+
+
+vfc_1 = reshape(vfc_1, 200, []);
+vfc_2 = reshape(vfc_2, 200, []);
+vfc_1_no_underrun = vfc_1;
+vfc_2_no_underrun = vfc_2;
+
+delete_idx = [];
+for ii = 1:size(vfc_1,2)
+    for j = 1:200
+        if abs(vfc_1_no_underrun(j,ii)) <1e-3
+            delete_idx = [delete_idx; ii];
+            break;
+        end
+        
+    end
+end
+vfc_1_no_underrun(:, delete_idx) = [];
+vfc_1_no_underrun = mean(vfc_1_no_underrun, 2);
+
+
+delete_idx = [];
+for ii = 1:size(vfc_2,2)
+    for j = 1:200
+        if abs(vfc_2_no_underrun(j,ii)) <1e-3
+            delete_idx = [delete_idx; ii];
+            break;
+        end
+        
+    end
+end
+vfc_2_no_underrun(:, delete_idx) = [];
+figure;
+plot(20*log10(abs(ifftshift(fft(mean(vfc_2_no_underrun, 2))))))
+hold on
+plot(20*log10(abs(ifftshift(fft(vfc_2_no_underrun(:, 1))))))
+legend('average on time domain', '1st rep')
+vfc_2_no_underrun = mean(vfc_2_no_underrun, 2);
+
+
+vfc_1_fft = fft(vfc_1_no_underrun);
+vfc_2_fft = fft(vfc_2_no_underrun);
+
+crop_range = 61:141;
+vfc_1_fft_cropped = vfc_1_fft(crop_range);
+vfc_2_fft_cropped = vfc_2_fft(crop_range);
+
+
+
+tau_max = (length(crop_range)-1) / BW;
+tau_step = tau_max / (length(crop_range)-1);
+tau = 0 : tau_step : tau_max;
+
+
+
+
+
+figure;
+plot(20*log10(abs(ifftshift(vfc_1_fft))))
+hold on
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

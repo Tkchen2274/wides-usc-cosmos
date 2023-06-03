@@ -1,0 +1,163 @@
+20191129_1218
+-------------
+
+Installation and start:
+    - Updated MB1 drivers module to version 1.75
+    - Installation scripts must be run to update MB1 driver
+      Windows: install_win.cmd
+      Linux  : install_mb1.sh
+
+GUI:
+    - Improved stability when running under Windows.
+
+TX:
+    - All TX antenna elements are enabled as default
+
+RX:
+    - All RX antenna elements are enabled as default.
+    - RX gain is adjusted.
+
+RX DCO:
+    - Updated RX DCO calibration algorithm for both Eder B and Eder B MMF
+    - RX antenna elements are kept enabled during calibration
+
+
+20191011_1030
+-------------
+
+Installation and start:
+    - Updated MB1 drivers module to version 1.73
+
+GUI:
+    - Improved stability when running under Windows.
+    - Added internal AGC functionality
+    - Reduced GUI height
+    - Added scrollbar to register view/modify section
+
+PLL:
+    - Added PLL low power mode. eder.pll.low_power_mode(True/False)
+    - Updated settings for Eder B MMF
+
+TX DCO:
+    - Improved LO leakage calibration.
+
+RX:
+    - Updated default bias_rx to 0xAA9 for Eder B MMF
+    - Updated internal AGC settings
+    - Added new beambook for RFM 3 R2.0
+
+RX DCO:
+    - Beam 63 is selected during RX DCO calibration for Eder B MMF
+
+TX:
+    - Added new beambook for RFM 3 R2.0
+    - BIAS_TX updated for Eder B MMF
+
+20190508_1430
+-------------
+Eder-B MMF (0x02741812) updated support:
+    bias_vco_x3 set based on frequency with lower limit at 59.13 GHz and upper limit at 68.31 GHz
+    Added TX and RX low power mode functions
+    Added RX DRV DCO calibration
+    Updated RX BB DCO printouts and initial settings.
+    Added RX LNA mute function (eder.rx.lna_state-function (using register rx_drv_dco bit 0))    
+
+Installation and start:
+    Added install script for Windows (install_win.cmd)
+    Added start script for Windows (start_win.cmd)
+    Added innstallation of colorama module to install script
+    Replaced EderFTDI version 1.6 with MB1 version 1.6
+
+Environment:
+    Added information/doc function for registers (eder.regs.doc('<register name>'))
+    Changed from eder_logger to evk_logger
+    Added autodetect-function for MB1 serial number
+
+RX DCO:
+    RX BB DCO: Changed so that BFRF gain settings are affected also in Eder-B MMF.
+    Removed an extra, erroneus 'None' in gain-default setting of run.
+    RX DCo and RX DRV DCO formatting.
+    RX DCO printout formatting.
+    Increased gain settings during DRV DCO calibration
+    Removed duplicate DCO report in TX LO leakage calibration function
+    Corrected syntax error in rx_dco.py
+    RX BB DCO updated to match Cruijff printouts. Base algorithm is the same as before.
+    Removed unused function from rx_dco.py
+
+TX DCO:
+    Updated LO leakage calibration. Loopback gain is adapted to extremely low/high temps.
+
+REF:
+    Change default value fast_clk_ctrl reference frequency select bit (bit 5) to 1 (45 MHz according to regmap ver 0.35).
+
+BF:
+    Added GPIO Beamforming functionality. *** MUST RUN install script ***
+    Modified bf awv dump/rd/wr functions to reflect reversed phase shifter positions in Eder B
+
+TX ALC:
+    Added Initial version of Tx ALC.
+
+GUI:
+    Renamed GUI Reset button to "Reset" from "TRX-BF01 Reset"
+    Added register documentation for GUI tooltip (see Environment note)
+    Added ALC buttons
+    Added selection between RFM 2.5 and RFM 3.0 support
+    Corrected Angle slider for -45 deg. and 45 deg. to prevent beam 0 and beam 63 (RX) selection
+    Recognise 'Enter' on command line and in register update fields
+    Set minimum window size
+    Unified Tx and RX command windows
+    Added complete register tabs with update/editing possibility
+    Added possibility to select detected MB1 serial number from autodetect-function
+    Added command history pulldown
+    Added save register item in file manu. Saves register dump as JSON file
+    Added possibility to Load Tx and Rx gain settings from JSON file selectable in file menu
+    Added EVK version number matching eder_evk version number
+
+Ederserver:
+    Updated ederserver
+    updated set txrx bf table
+    updated edeserver set tx and rx bf table
+    updated rxsetupnodcocal in ederserver
+    TX phase shifters settings updated
+    added txdcocal to ederserver
+
+2018-03-07  01
+--------------
+
+Functionality:
+- Restores beam angle after performing LO leakage calibration
+
+GUI:
+- Show return value of commands which only return a value
+- Register values are updated when edit box is closed
+- Changed order of registers on GUI
+- GUI version 1.2
+
+
+2018-03-07  00
+--------------
+
+Functionality:
+- Updated EderFtdi (version 1.5) included in the package. (Make sure to run install_mb1.sh)
+- Faster RX DCO calib.
+- Faster LO leakage calib.
+- Different settings for Eder Gen 1 and Gen 2.
+- Added start-up command switch for selecting Eder Gen 1 and Gen 2 (Default is Gen 2)
+  Example: ./start_mb1.sh -v 1 -gui SN0151   # Starts the environment with GUI using settings for Eder Gen 1
+  Example: ./ start_mb1.sh -v 2 -gui SN0151  # Starts the environment with GUI using settings for Eder Gen 2
+  Example: ./ start_mb1.sh -gui SN0151       # Starts the environment with GUI using settings for Eder Gen 2
+  Example: ./ start_mb1.sh -v 1 SN0151       # Starts the text-based environment using settings for Eder Gen 1
+- TX BB bias set to 80%
+
+
+GUI:
+- Tx_bb_ctrl added to GUI
+- GUI version 1.1 shown at top right
+- Start-up text in command text box changed
+- Register edit box moves in-line with the register being changed
+- Tx_rf_gain and tx_bf_gain added to GUI
+- Added button to clear command output window
+- Shows chip ID in GUI at start-up
+- Beam steering slider functionality corrected
+- Fixed problem with incorrect RX enable/disable button text after RX DCO calib.
+

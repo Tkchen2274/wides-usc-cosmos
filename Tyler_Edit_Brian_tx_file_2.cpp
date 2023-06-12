@@ -8,7 +8,10 @@
 // Modifier: Yuning (Brian) Zhang
 // Copyright: 2023
 //
+// Sub-Modifier: Tyler Chen ~ 2023
 
+// doc strings example
+// https://developer.lsst.io/cpp/api-docs.html
 
 
 /**********************************************
@@ -32,14 +35,78 @@ Notes:
 /*=========================================
 Items waited to be implemented:
     1. Integrate Python as a library into C++
+        - https://www.codeproject.com/Articles/820116/Embedding-Python-program-in-a-C-Cplusplus-code
     2. Automation logic for indoor experiment
     3. RF configuration block - pack as a subfunction or whatever to make
         the main code as simple as possible
 Question:
     1. What is the difference between ant/channels/subdev?
     2. How to make the send buffer size as equal to the txt file length?
+        6/10/23 - what does this mean? The size of txt file like how may words in the text file?
+
+    #include <iostream>
+    #include <fstream>
+    #include <string>
+
+    using namespace std;
+
+    const char FileName[] = "text.txt";
+
+    int main () 
+    {
+    string line;
+    ifstream inMyStream (FileName); 
+    int c = 0;
+
+    if (inMyStream.is_open()) 
+    {
+
+        while( getline ( inMyStream, line ) )
+        {
+            cout << line << endl;
+            c += line.length();
+        }
+    }
+        }
+        inMyStream.close(); 
+
+    system("pause");
+    return 0;
+    }
+
 =========================================*/
 
+/*=========================================
+Thoughts:
+    6/9/23 - library of python scripts to move the xy tables
+
+=========================================*/
+/*=========================================
+Miles Stone Notes
+6/9/13
+
+    Now here are some questions to you who work on the coding part: 
+    What is the difference between ant/channels/subdev?
+    How to make the send buffer size as equal to the txt file length?
+
+6/11/23
+
+    Some tips about this issue: maybe you can try to load their example image, 
+    select one of those predefined with UHD installed. 
+
+    Haoyu working on cpp/python library integration 
+    And for some tasks such as integrating Python into C++, you can also try to do it locally. 
+    For example, write a small Python program, then try tointegrate it into another very simple C++ code and run it. 
+    The functional part of the python/C++ code is not the point of this integration, 
+    but how to configure the environment and how to insert Python into C++ is the key. 
+
+    For tasks such as the rf coding, we need to figure out what are those parameters and what do they represent.
+    For this part we need a huge amount of online searches and investigation which might don't need to even access the node as well. 
+
+    For any final verification that has to do with the actual node, then it makes sense that you need to work with an image. 
+    Still, if the one I created doesn't work/load, go from their prepared images and that should be working. 
+    Notify me if their pre-provided image still doesn't work and then I'll send another request to COSMOS for urgent reaction. 
+=========================================*/
 #include <uhd/types/tune_request.hpp>
 #include <uhd/usrp/multi_usrp.hpp>
 #include <uhd/utils/safe_main.hpp>
@@ -59,6 +126,13 @@ Question:
 namespace po = boost::program_options;
 
 static bool stop_signal_called = false;
+
+/**
+ * Sum numbers in a vector.
+ *
+ * @param takes an int 
+ * @return no return
+ */
 void sig_int_handler(int)
 {
     stop_signal_called = true;

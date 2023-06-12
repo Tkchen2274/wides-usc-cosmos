@@ -24,55 +24,57 @@ USRP Configuration reference: https://files.ettus.com/manual/page_usrp_x3x0.html
 RF Configuration reference: https://files.ettus.com/manual/classuhd_1_1usrp_1_1multi__usrp.html
 **********************************************/
 
-
 /*------------------------------------
 Notes:
     1. USRP Interface should be set to 10 Gigabit Ethernet - makes max sampling rate as 200MS/s (https://kb.ettus.com/About_USRP_Bandwidths_and_Sampling_Rates)
 ------------------------------------*/
 
-
-
 /*=========================================
 Items waited to be implemented:
     1. Integrate Python as a library into C++
         - https://www.codeproject.com/Articles/820116/Embedding-Python-program-in-a-C-Cplusplus-code
+
     2. Automation logic for indoor experiment
+        - 6/11/23 implement after the python library is ready 
+
     3. RF configuration block - pack as a subfunction or whatever to make
         the main code as simple as possible
+
 Question:
     1. What is the difference between ant/channels/subdev?
     2. How to make the send buffer size as equal to the txt file length?
+
         6/10/23 - what does this mean? The size of txt file like how may words in the text file?
 
-    #include <iostream>
-    #include <fstream>
-    #include <string>
+        #include <iostream>
+        #include <fstream>
+        #include <string>
 
-    using namespace std;
+        using namespace std;
 
-    const char FileName[] = "text.txt";
+        const char FileName[] = "text.txt";
 
-    int main () 
-    {
-    string line;
-    ifstream inMyStream (FileName); 
-    int c = 0;
-
-    if (inMyStream.is_open()) 
-    {
-
-        while( getline ( inMyStream, line ) )
+        int main () 
         {
-            cout << line << endl;
-            c += line.length();
-        }
-    }
-        }
-        inMyStream.close(); 
+        string line;
+        ifstream inMyStream (FileName); 
+        int c = 0;
 
-    system("pause");
-    return 0;
-    }
+        if (inMyStream.is_open()) 
+        {
+
+            while( getline ( inMyStream, line ) )
+            {
+                cout << line << endl;
+                c += line.length();
+            }
+        }
+            }
+            inMyStream.close(); 
+
+        system("pause");
+        return 0;
+        }
 
 =========================================*/
 
@@ -131,13 +133,23 @@ static bool stop_signal_called = false;
  * Sum numbers in a vector.
  *
  * @param takes an int 
- * @return no return
+ * @return None.
  */
 void sig_int_handler(int)
 {
     stop_signal_called = true;
 }
 
+/**
+ * What it does
+ *
+ * @param tx_stream: A pointer to the transmit streamer object.
+ * @param file: The path to the file containing the data to be sent.
+ * @param samps_per_buff: The number of samples per buffer to be read from the file.
+ * @return None.
+ *
+ * Doesn't need editing 
+ */
 template <typename samp_type>
 void send_from_file(
     uhd::tx_streamer::sptr tx_stream, const std::string& file, size_t samps_per_buff)
@@ -161,6 +173,13 @@ void send_from_file(
     infile.close();
 }
 
+/**
+ * Main Function
+ *
+ * @param 
+ * @return None.
+ *
+ */
 int UHD_SAFE_MAIN(int argc, char* argv[])
 {
     //// ====== Setup Variables ======
